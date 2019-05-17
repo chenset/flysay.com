@@ -58,7 +58,7 @@
             padding: 0 30px;
             position: absolute;
             top: 50%;
-            margin-top: -100px;
+            margin-top: -90px;
             text-align: center;
             z-index: 2;
         }
@@ -84,10 +84,17 @@
             padding: 10px 40px 10px 0;
         }
 
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-
 <div class="main-wrap">
     <header class="main-header">
         <div class="container">
@@ -114,27 +121,48 @@
 
 <script src="exif.js"></script>
 
-<div style="width: 100%;height: 100%;position: absolute;z-index: 1;overflow: hidden;text-align: center;display: none" id="img-wrap">
-    <img src="IMG_6502.JPEG" id="img1" style="max-width: 100%;min-width: 1080px"/>
+<div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
+     id="img-wrap">
+    <img id="img-el" style="height: auto;max-width: 100%;min-width:1400px;display: block;margin:  0 auto;position: relative;"/>
 </div>
-<footer id="exif-wrap" style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 12px;display: none">
+<footer id="exif-wrap"
+        style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 10px;display: none">
     <span id="exif-date"></span>
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
 <script>
-    window.onload = function () {
-        var img1 = document.getElementById("img1");
-        EXIF.getData(img1, function () {
-            let info = EXIF.getAllTags(this);
+    let img = document.getElementById("img-el");
+    img.src = "images/p\ (" + Math.ceil(Math.random() * 10) + ').JPEG';
 
-            document.getElementById('img-wrap').style.display = 'block';
+    function imgPosition() {
+        if (img.clientWidth > window.innerWidth) {
+            img.style.left = (-(img.clientWidth - window.innerWidth) / 2) + "px";
+        } else {
+            img.style.left = "0";
+        }
+        img.style.top = (-(img.clientHeight - window.innerHeight) / 2) + "px";
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        setTimeout(function () {
+            imgPosition();
+        }, 100);
+    });
+
+    img.addEventListener('load', function () {
+        document.getElementById('img-wrap').style.display = 'block';
+        imgPosition();
+        EXIF.getData(img, function () {
+            let info = EXIF.getAllTags(this);
             document.getElementById('exif-wrap').style.display = 'block';
             let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
                 longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
             document.getElementById('exif-date').innerText = info.DateTime;
             document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
         });
-    }
+    });
 </script>
 </body>
 </html>
