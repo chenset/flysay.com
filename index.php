@@ -123,7 +123,10 @@
 
 <div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
      id="img-wrap">
-    <img id="img-el" src="random.php"
+    <img id="img-el"
+         <?php if ($files = glob('images/*.*')) { ?>
+        src="<?php echo $files[array_rand($files)]; ?>"
+        <?php } ?>
          style="height: auto;max-width: 100%;min-width:1400px;display: block;margin:  0 auto;position: relative;"/>
 </div>
 <footer id="exif-wrap"
@@ -133,7 +136,6 @@
 </footer>
 <script>
     let img = document.getElementById("img-el");
-
     function imgPosition() {
         if (img.clientWidth > window.innerWidth) {
             img.style.left = (-(img.clientWidth - window.innerWidth) / 2) + "px";
@@ -154,16 +156,14 @@
     window.addEventListener('load', function () {
         document.getElementById('img-wrap').style.display = 'block';
         imgPosition();
-        setTimeout(function () {
-            EXIF.getData(img, function () {
-                let info = EXIF.getAllTags(this);
-                document.getElementById('exif-wrap').style.display = 'block';
-                let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
-                    longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
-                document.getElementById('exif-date').innerText = info.DateTime;
-                document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
-            });
-        }, 1000);
+        EXIF.getData(img, function () {
+            let info = EXIF.getAllTags(this);
+            document.getElementById('exif-wrap').style.display = 'block';
+            let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
+                longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
+            document.getElementById('exif-date').innerText = info.DateTime;
+            document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
+        });
     });
 </script>
 </body>
