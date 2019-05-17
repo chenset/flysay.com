@@ -125,7 +125,7 @@
      id="img-wrap">
     <img id="img-el"
          <?php if ($files = glob('images/*.*')) { ?>
-        src="<?php echo $files[array_rand($files)]; ?>"
+        src="https://img.flysay.com/<?php echo $files[array_rand($files)]; ?>"
         <?php } ?>
          style="height: auto;max-width: 100%;min-width:1400px;display: block;margin:  0 auto;position: relative;"/>
 </div>
@@ -153,7 +153,7 @@
         }, 100);
     });
 
-    window.addEventListener('load', function () {
+    img.addEventListener('load', function () {
         document.getElementById('img-wrap').style.display = 'block';
         imgPosition();
         EXIF.getData(img, function () {
