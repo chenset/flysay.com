@@ -124,7 +124,7 @@
 <div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
      id="img-wrap">
     <img id="img-el"
-         async-src="random.php"
+         data-async-src="random.php"
          style="height: auto;max-width: 100%;min-width:1400px;display: block;margin:  0 auto;position: relative;"/>
 </div>
 <footer id="exif-wrap"
@@ -134,7 +134,7 @@
 </footer>
 <script>
     let img = document.getElementById("img-el");
-    img.src = img.getAttribute('async-src');
+    img.src = img.getAttribute('data-async-src');
 
     function imgPosition() {
         if (img.clientWidth > window.innerWidth) {
