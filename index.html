@@ -114,10 +114,10 @@
 
 <script src="exif.js"></script>
 
-<div style="width: 100%;height: 100%;position: absolute;z-index: 1;overflow: hidden;text-align: center">
+<div style="width: 100%;height: 100%;position: absolute;z-index: 1;overflow: hidden;text-align: center;display: none" id="img-wrap">
     <img src="IMG_6502.JPEG" id="img1" style="max-width: 100%;min-width: 1080px"/>
 </div>
-<footer style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 12px">
+<footer id="exif-wrap" style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 12px;display: none">
     <span id="exif-date"></span>
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
@@ -127,6 +127,8 @@
         EXIF.getData(img1, function () {
             let info = EXIF.getAllTags(this);
 
+            document.getElementById('img-wrap').style.display = 'block';
+            document.getElementById('exif-wrap').style.display = 'block';
             let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
                 longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
             document.getElementById('exif-date').innerText = info.DateTime;
