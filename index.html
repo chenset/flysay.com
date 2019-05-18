@@ -52,6 +52,7 @@
             list-style: none;
         }
 
+
         .main-wrap {
             width: 100%;
             padding: 0 30px;
@@ -68,7 +69,7 @@
             margin-left: auto;
             margin-right: auto;
             background: #FFF;
-            padding: 5px 20px 10px;
+            padding: 2px 20px 10px;
             opacity: 0.9;
         }
 
@@ -81,6 +82,10 @@
             line-height: 14px;
             font-size: 14px;
             padding: 10px 40px 10px 0;
+        }
+
+        .site-menu li:last-child {
+            padding-right: 0;
         }
 
         @keyframes fadein {
@@ -97,7 +102,9 @@
 <div class="main-wrap">
     <header class="main-header">
         <div class="container">
-            <div style="font-size:12px;color: #AAA;padding:5px 10px;float: right;cursor: pointer" onclick="document.getElementsByClassName('main-wrap')[0].style.display='none'"> x </div>
+            <div style="font-size:12px;color: #AAA;padding:5px 10px;float: right;cursor: pointer"
+                 onclick="document.getElementsByClassName('main-wrap')[0].style.display='none'"> x
+            </div>
             <h2 class="main-logo-wrap">
                 <a id="main-logo" href="/">
                     <span style="color:#ff5252">F</span><span style="color:#cc9966">l</span><span
