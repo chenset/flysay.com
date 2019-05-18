@@ -8,7 +8,6 @@
     <link rel="canonical" href="https://flysay.com"/>
     <link rel="icon" href="//flysay.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="//flysay.com/favicon.ico" type="image/x-icon">
-    <link rel="bookmark" href="//flysay.com/favicon.ico" type="image/x-icon">
     <style>
         * {
             padding: 0;
@@ -98,6 +97,7 @@
 <div class="main-wrap">
     <header class="main-header">
         <div class="container">
+            <div style="font-size:12px;color: #AAA;padding:5px 10px;float: right;cursor: pointer" onclick="document.getElementsByClassName('main-wrap')[0].style.display='none'"> x </div>
             <h2 class="main-logo-wrap">
                 <a id="main-logo" href="/">
                     <span style="color:#ff5252">F</span><span style="color:#cc9966">l</span><span
@@ -123,8 +123,8 @@
 
 <div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
      id="img-wrap">
-    <img id="img-el" src=""
-         style="height: auto;max-width: 100%;min-width:1400px;display: block;margin: 0 auto;position: relative;"/>
+    <img id="img-el"
+         style="max-width: 100%;min-width:1400px;height:auto;display: block;margin: 0 auto;position: relative;"/>
 </div>
 <footer id="exif-wrap"
         style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 10px;display: none;animation: fadein 2s;">
