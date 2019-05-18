@@ -101,8 +101,8 @@
             <h2 class="main-logo-wrap">
                 <a id="main-logo" href="/">
                     <span style="color:#ff5252">F</span><span style="color:#cc9966">l</span><span
-                        style="color:#41B883">y</span> <span style="color:#01AAED">S</span><span
-                        style="color:#cc9966">a</span><span style="color:#41B883">y</span>
+                            style="color:#41B883">y</span> <span style="color:#01AAED">S</span><span
+                            style="color:#cc9966">a</span><span style="color:#41B883">y</span>
                 </a>
             </h2>
             <nav class="site-menu">
@@ -124,8 +124,8 @@
 <div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
      id="img-wrap">
     <img id="img-el"
-         <?php if ($files = glob('images/*.*')) { ?>
-        src="https://img.flysay.com/<?php echo $files[array_rand($files)]; ?>"
+        <?php if ($files = glob('images/*.*')) { ?>
+            data-image="<?php echo $files[array_rand($files)]; ?>"
         <?php } ?>
          style="height: auto;max-width: 100%;min-width:1400px;display: block;margin:  0 auto;position: relative;"/>
 </div>
@@ -135,7 +135,14 @@
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
 <script>
-    let img = document.getElementById("img-el");
+    let imgStorage = [
+            'https://h.flysay.com/',
+            'https://pages.flysay.com/',
+            'https://img.flysay.com/',
+            '/',
+        ],
+        img = document.getElementById("img-el");
+
     function imgPosition() {
         if (img.clientWidth > window.innerWidth) {
             img.style.left = (-(img.clientWidth - window.innerWidth) / 2) + "px";
@@ -153,18 +160,32 @@
         }, 100);
     });
 
-    img.addEventListener('load', function () {
-        document.getElementById('img-wrap').style.display = 'block';
-        imgPosition();
-        EXIF.getData(img, function () {
-            let info = EXIF.getAllTags(this);
-            document.getElementById('exif-wrap').style.display = 'block';
-            let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
-                longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
-            document.getElementById('exif-date').innerText = info.DateTime;
-            document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
+    function loadImg() {
+        img.src = imgStorage.shift() + img.getAttribute('data-image');
+    }
+
+    setTimeout(function () {
+        loadImg();
+        img.addEventListener('error', function (event) {
+            if (imgStorage.length) {
+                loadImg();
+            }
         });
-    });
+        img.addEventListener('load', function () {
+            document.getElementById('img-wrap').style.display = 'block';
+            imgPosition();
+            EXIF.getData(img, function () {
+                let info = EXIF.getAllTags(this);
+                if (info.hasOwnProperty('GPSLatitude') && info.GPSLatitude.length) {
+                    document.getElementById('exif-wrap').style.display = 'block';
+                    let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
+                        longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
+                    document.getElementById('exif-date').innerText = info.DateTime;
+                    document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
+                }
+            });
+        });
+    }, 200);
 </script>
 </body>
 </html>
