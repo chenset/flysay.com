@@ -145,34 +145,34 @@
     ], img = document.getElementById("img-el");
 
     function start() {
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                try {
-                    let items = JSON.parse(this.responseText);
-                    imagePath = items[Math.floor(Math.random() * items.length)].path;
-                    loadImg();
-                    img.addEventListener('error', loadImg);
-                } catch (e) {
+        let script = document.createElement('script');
+        script.onload = function () {
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    try {
+                        let items = JSON.parse(this.responseText);
+                        imagePath = items[Math.floor(Math.random() * items.length)].path;
+                        loadImg();
+                        img.addEventListener('error', loadImg);
+                    } catch (e) {
+                    }
                 }
-            }
+            };
+            xhr.open("GET", "https://api.github.com/repositories/186582306/contents/images", true);
+            xhr.setRequestHeader("Authorization", "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"); // + for hack
+            xhr.send();
         };
-        xhr.open("GET", "https://api.github.com/repositories/186582306/contents/images", true);
-        xhr.setRequestHeader("Authorization", "token 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"); // + for hack
-        xhr.send();
+        script.src = "/exif.js";
+        document.getElementsByTagName('head')[0].appendChild(script);
     }
 
     document.getElementById('switch').addEventListener('click', function () {
-        this.style.transform = 'rotate(45deg)';
         if (flag) {
             document.getElementsByClassName('main-wrap')[0].style.display = 'none';
         } else {
-            let script = document.createElement('script');
-            script.onload = function() {
-                start();
-            };
-            script.src = "/exif.js";
-            document.getElementsByTagName('head')[0].appendChild(script);
+            start();
         }
+        this.style.transform = 'rotate(45deg)';
         flag = true;
     });
 
