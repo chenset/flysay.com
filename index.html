@@ -137,33 +137,32 @@
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
 <script>
-    let flag = false, resizeTimer, xhr = new XMLHttpRequest(), imagePath, imgStorage = [
+    let flag = false, resizeTimer, xhr = new XMLHttpRequest(), imagePaths, imgStorage = [
         'https://h.flysay.com/',
         'https://pages.flysay.com/',
         'https://img.flysay.com/',
         '/',
     ], img = document.getElementById("img-el");
+    start();
+
+    function randomImagePath() {
+        return imagePaths[Math.floor(Math.random() * imagePaths.length)].path;
+    }
 
     function start() {
-        let script = document.createElement('script');
-        script.onload = function () {
-            xhr.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    try {
-                        let items = JSON.parse(this.responseText);
-                        imagePath = items[Math.floor(Math.random() * items.length)].path;
-                        loadImg();
-                        img.addEventListener('error', loadImg);
-                    } catch (e) {
-                    }
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                try {
+                    imagePaths = JSON.parse(this.responseText);
+                    loadImg();
+
+                } catch (e) {
                 }
-            };
-            xhr.open("GET", "https://api.github.com/repositories/186582306/contents/images", true);
-            xhr.setRequestHeader("Authorization", "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"); // + for hack
-            xhr.send();
+            }
         };
-        script.src = "/exif.js";
-        document.getElementsByTagName('head')[0].appendChild(script);
+        xhr.open("GET", "https://api.github.com/repositories/186582306/contents/images", true);
+        xhr.setRequestHeader("Authorization", "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"); // + for hack
+        xhr.send();
     }
 
     document.getElementById('switch').addEventListener('click', function () {
@@ -183,25 +182,34 @@
         }, 100);
     });
 
-
+    img.addEventListener('click', loadImg);
+    img.addEventListener('error', function () {
+        if (imgStorage.length) {
+            img.src = imgStorage.shift() + randomImagePath();
+        }
+    });
     img.addEventListener('load', function () {
         document.getElementById('img-wrap').style.display = 'block';
         imgPosition();
-        EXIF.getData(img, function () {
-            let info = EXIF.getAllTags(this);
-            if (info.hasOwnProperty('GPSLatitude') && info.GPSLatitude.length) {
-                document.getElementById('exif-wrap').style.display = 'block';
-                let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
-                    longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
-                document.getElementById('exif-date').innerText = info.DateTime;
-                document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
-            }
+        loadScriptOnce('exif.js', function () {
+            img.exifdata = null;
+            EXIF.getData(img, function () {
+                let info = EXIF.getAllTags(this);
+                if (info.hasOwnProperty('GPSLatitude') && info.GPSLatitude.length) {
+                    document.getElementById('exif-wrap').style.display = 'block';
+                    let latitude = (info.GPSLatitude[0] + info.GPSLatitude[1] / 60 + info.GPSLatitude[2] / 3600).toFixed(7),
+                        longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
+                    console.log(info.DateTime);
+                    document.getElementById('exif-date').innerText = info.DateTime;
+                    document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
+                }
+            });
         });
     });
 
     function loadImg() {
         if (imgStorage.length) {
-            img.src = imgStorage.shift() + imagePath;
+            img.src = imgStorage[0] + randomImagePath();
         }
     }
 
@@ -212,6 +220,24 @@
             img.style.left = "0";
         }
         img.style.top = (-(img.clientHeight - window.innerHeight) / 2) + "px";
+    }
+
+    function loadScriptOnce(src, callback) {
+        window.scriptSrcArrays = window.scriptSrcArrays ? window.scriptSrcArrays : [];
+        for (let i = 0; i < window.scriptSrcArrays.length; i++) {
+            if (window.scriptSrcArrays[i] === src) {
+                callback && callback();
+                return;
+            }
+        }
+        window.scriptSrcArrays.push(src);
+        let script = document.createElement('script');
+        script.onload = function () {
+            script.onload = null;
+            callback && callback();
+        };
+        script.src = src;
+        document.getElementsByTagName('head')[0].appendChild(script);
     }
 </script>
 </body>
