@@ -168,7 +168,7 @@
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
 <script>
-    let flag = false, resizeTimer, xhr = new XMLHttpRequest(), imagePaths, imgStorage = [
+    let imagePaths, imgStorage = [
         'https://h.flysay.com/',
         'https://pages.flysay.com/',
         'https://img.flysay.com/',
@@ -180,12 +180,12 @@
     }
 
     function start() {
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 try {
                     imagePaths = JSON.parse(this.responseText);
                     loadImg();
-
                 } catch (e) {
                 }
             }
@@ -195,19 +195,19 @@
         xhr.send();
     }
 
-    document.getElementById('switch').addEventListener('click', function (e) {
-        if (flag) {
+    document.getElementById('switch').addEventListener('click', function () {
+        if (this.getAttribute('data-click-flag')) {
             document.getElementsByClassName('main-wrap')[0].style.display = 'none';
         } else {
             start();
         }
         this.style.transform = 'rotate(45deg)';
-        flag = true;
+        this.setAttribute('data-click-flag', '1');
     });
 
     window.addEventListener('resize', function () {
-        clearTimeout(resizeTimer);
-        setTimeout(function () {
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(function () {
             imgPosition();
         }, 100);
     });
