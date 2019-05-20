@@ -77,7 +77,7 @@ img.addEventListener('error', function () {
     }
 });
 img.addEventListener('load', function () {
-    hidenLoading();
+    hideLoading();
     document.getElementById('img-wrap').style.display = 'block';
     imgPosition();
     loadScriptOnce('exif.js', function () {
@@ -106,7 +106,7 @@ function showLoading(e) {
     loading.style.left = x - loading.offsetWidth / 2 + "px";
 }
 
-function hidenLoading() {
+function hideLoading() {
     document.getElementById('layer').style.display = 'none';
     document.getElementById('loading').style.display = 'none';
 }
