@@ -1,5 +1,6 @@
 let imagePaths, imgStorage = [
     'https://h.flysay.com/',
+    'https://hh.flysay.com/',
     'https://pages.flysay.com/',
     'https://img.flysay.com/',
     '/',
