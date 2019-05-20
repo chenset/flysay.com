@@ -1,3 +1,5 @@
+'use strict';
+
 let imagePaths, imgStorage = [
     'https://h.flysay.com/',
     'https://hh.flysay.com/',
@@ -8,19 +10,52 @@ let imagePaths, imgStorage = [
 
 function start(e) {
     showLoading(e);
+    ajax({
+        url: 'https://api.github.com/repositories/186582306/contents/images',
+        headers: {"Authorization": "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"},
+        success: function (res) {
+            imagePaths = JSON.parse(res.responseText);
+            loadImg();
+        },
+        error: function () {
+            ajax({
+                url: 'https://h.flysay.com/repositories/186582306/contents/images',
+                success: function (res) {
+                    imagePaths = JSON.parse(res.responseText);
+                    loadImg();
+                }
+            });
+        }
+    });
+}
+
+function ajax(option) {
+    let url = option.url || '',
+        method = option.method || 'GET',
+        data = option.data,
+        headers = option.headers || {},
+        success = option.success,
+        error = option.error;
+
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            try {
-                imagePaths = JSON.parse(this.responseText);
-                loadImg();
-            } catch (err) {
+        if (this.readyState === 4) {
+            if (this.status === 200) {
+                success && success(this);
+            } else {
+                error && error(this);
             }
         }
     };
-    xhr.open("GET", "https://api.github.com/repositories/186582306/contents/images", true);
-    xhr.setRequestHeader("Authorization", "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"); // + for hack
-    xhr.send();
+    xhr.open(method, url, true);
+    for (let k in headers) {
+        xhr.setRequestHeader(k, headers[k]);
+    }
+    if (data) {
+        xhr.send(data);
+    } else {
+        xhr.send();
+    }
 }
 
 function randomImagePath() {
@@ -59,6 +94,7 @@ img.addEventListener('load', function () {
         });
     });
 });
+
 function showLoading(e) {
     let loading = document.getElementById('loading');
     document.getElementById('layer').style.display = 'block';
@@ -69,15 +105,18 @@ function showLoading(e) {
     loading.style.top = y - loading.offsetHeight / 2 + "px";
     loading.style.left = x - loading.offsetWidth / 2 + "px";
 }
+
 function hidenLoading() {
     document.getElementById('layer').style.display = 'none';
     document.getElementById('loading').style.display = 'none';
 }
+
 function loadImg() {
     if (imgStorage.length) {
         img.src = imgStorage[0] + randomImagePath();
     }
 }
+
 function imgPosition() {
     if (img.clientWidth > window.innerWidth) {
         img.style.left = (-(img.clientWidth - window.innerWidth) / 2) + "px";
