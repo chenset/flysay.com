@@ -109,8 +109,8 @@
             height: 36px;
             margin: 1px;
             border-radius: 50%;
-            border: 4px solid #fff;
-            border-color: #fff transparent #fff transparent;
+            border: 4px solid #eee;
+            border-color: #eee transparent #eee transparent;
             animation: lds-dual-ring 1.2s linear infinite;
         }
 
@@ -168,12 +168,12 @@
     <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
 </footer>
 <script>
-    document.getElementById('switch').addEventListener('click', function () {
+    document.getElementById('switch').addEventListener('click', function (e) {
         if (this.getAttribute('data-click-flag')) {
             document.getElementsByClassName('main-wrap')[0].style.display = 'none';
         } else {
             loadScriptOnce('base.js', function () {
-                start()
+                start(e)
             });
         }
         this.style.transform = 'rotate(45deg)';
