@@ -15,10 +15,16 @@
             -webkit-box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             font-family: Helvetica, Arial, sans-serif, "Microsoft YaHei", 'Helvetica Neue';
             color: #333;
             font-size: 14px;
+            display: table;
         }
 
         *:focus {
@@ -36,7 +42,7 @@
 
         h1, h2, h3, h4, h5, h6 {
             font-weight: 400;
-            margin: 15px 0;
+            margin: 12px 0;
         }
 
         input {
@@ -52,24 +58,22 @@
             list-style: none;
         }
 
-        .main-wrap {
-            width: 100%;
-            padding: 0 30px;
-            position: absolute;
-            top: 50%;
-            margin-top: -90px;
+        .contents {
+            display: table-cell;
             text-align: center;
-            z-index: 2;
+            vertical-align: middle;
+            width: 100%;
+            height: 100%;
         }
 
         .main-header {
+            position: relative;
             display: inline-block;
             text-align: left;
-            margin-left: auto;
-            margin-right: auto;
             background: #FFF;
             padding: 2px 20px 10px;
             opacity: 0.9;
+            z-index: 2;
         }
 
         .site-menu {
@@ -126,10 +130,10 @@
     </style>
 </head>
 <body>
-<div class="main-wrap">
+<div class="contents">
     <header class="main-header">
         <div class="container">
-            <div style="font-size:14px;color: #ff5252;padding:5px 10px;float: right;cursor: pointer;animation: fadein 3s"
+            <div style="font-size:14px;color: #ff5252;padding:5px 10px;float: right;cursor: pointer;animation: fadein 3s;"
                  id="switch">+
             </div>
             <h2 class="main-logo-wrap">
@@ -151,26 +155,26 @@
             </nav>
         </div>
     </header>
+
+    <div style="height:100%;width:100%;position: absolute;top:0;left:0;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
+         id="img-wrap">
+        <img id="img-el"
+             style="cursor:pointer;max-width: 100%;min-width:1400px;height:auto;display: block;margin: 0 auto;position: relative;"/>
+    </div>
+
+    <div style="display:none;position:fixed;z-index: 999;width: 100%;height: 100%;background: none;" id="layer"></div>
+    <div class="lds-dual-ring" id="loading"></div>
+
+    <footer id="exif-wrap"
+            style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 10px;display: none;animation: fadein 2s;">
+        <span id="exif-date"></span>
+        <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
+    </footer>
 </div>
-
-<div style="height:100%;width:100%;position: absolute;z-index: 1;overflow: hidden;display:none;animation: fadein 2s;"
-     id="img-wrap">
-    <img id="img-el"
-         style="cursor:pointer;max-width: 100%;min-width:1400px;height:auto;display: block;margin: 0 auto;position: relative;"/>
-</div>
-
-<div style="display:none;position:fixed;z-index: 999;width: 100%;height: 100%;background: none;" id="layer"></div>
-<div class="lds-dual-ring" id="loading"></div>
-
-<footer id="exif-wrap"
-        style="position: fixed;bottom: 0;left:0;z-index: 2;background: #FFF; opacity: 0.8;padding:2px 6px;font-size: 10px;display: none;animation: fadein 2s;">
-    <span id="exif-date"></span>
-    <a style="margin-left: 6px" target="_blank" id="exif-google-map">Map</a>
-</footer>
 <script>
     document.getElementById('switch').addEventListener('click', function (e) {
         if (this.getAttribute('data-click-flag')) {
-            document.getElementsByClassName('main-wrap')[0].style.display = 'none';
+            document.getElementsByClassName('main-header')[0].style.display = 'none';
         } else {
             loadScriptOnce('base.js?v=1', function () {
                 start(e)
