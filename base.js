@@ -32,7 +32,6 @@ window.addEventListener('resize', function () {
         imgPosition();
     }, 100);
 });
-
 img.addEventListener('click', showLoading, true);
 img.addEventListener('click', loadImg);
 img.addEventListener('error', function () {
@@ -59,7 +58,6 @@ img.addEventListener('load', function () {
         });
     });
 });
-
 function showLoading(e) {
     let loading = document.getElementById('loading');
     document.getElementById('layer').style.display = 'block';
@@ -70,18 +68,15 @@ function showLoading(e) {
     loading.style.top = y - loading.offsetHeight / 2 + "px";
     loading.style.left = x - loading.offsetWidth / 2 + "px";
 }
-
 function hidenLoading() {
     document.getElementById('layer').style.display = 'none';
     document.getElementById('loading').style.display = 'none';
 }
-
 function loadImg() {
     if (imgStorage.length) {
         img.src = imgStorage[0] + randomImagePath();
     }
 }
-
 function imgPosition() {
     if (img.clientWidth > window.innerWidth) {
         img.style.left = (-(img.clientWidth - window.innerWidth) / 2) + "px";
