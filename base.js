@@ -77,8 +77,9 @@ img.addEventListener('error', function () {
     }
 });
 img.addEventListener('load', function () {
-    hideLoading();
     document.getElementById('img-wrap').style.display = 'block';
+    document.getElementById('exif-wrap').style.display = 'none';
+    hideLoading();
     imgPosition();
     loadScriptOnce('exif.js', function () {
         img.exifdata = null;
