@@ -10,15 +10,15 @@ let imagePaths, imgStorage = [
 function start(e) {
     showLoading(e);
     ajax({
-        url: 'https://api.github.com/repositories/186582306/contents/images',
-        headers: {"Authorization": "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"},
+        url: 'https://gitee.com/api/v5/repos/chenset/flysay.com/contents/images?access_token=9b9eadf'+'3cbb91ac1'+'0f6e2c24d6c81234',
         success: function (res) {
             imagePaths = JSON.parse(res.responseText);
             loadImg();
         },
         error: function () {
             ajax({
-                url: 'https://h.flysay.com/repositories/186582306/contents/images',
+                url: 'https://api.github.com/repositories/186582306/contents/images',
+                headers: {"Authorization": "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"},
                 success: function (res) {
                     imagePaths = JSON.parse(res.responseText);
                     loadImg();
