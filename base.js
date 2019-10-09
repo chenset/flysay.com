@@ -1,7 +1,7 @@
 'use strict';
 
 let imagePaths, imgStorage = [
-    'https://chenset.gitee.io/flysay.com/',
+    'https://coding-pages.flysay.com/',
     'https://pages.flysay.com/',
     'https://img.flysay.com/',
     '/',
