@@ -34,9 +34,11 @@ function ajax(option) {
         data = option.data,
         headers = option.headers || {},
         success = option.success,
+        timeout = option.timeout || 10000,
         error = option.error;
 
     let xhr = new XMLHttpRequest();
+    xhr.timeout = timeout;
     xhr.onreadystatechange = function () {
         if (this.readyState === 4) {
             if (this.status === 200 || this.status === 304) {
