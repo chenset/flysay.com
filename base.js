@@ -82,7 +82,8 @@ window.addEventListener('resize', function () {
         imgPosition();
     }, 100);
 });
-document.getElementById('prev-img').addEventListener('click', function () {
+document.getElementById('prev-img').addEventListener('click', function (e) {
+    showLoading(e);
     loadImg(true)
 });
 img.addEventListener('click', showLoading, true);
