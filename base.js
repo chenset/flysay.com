@@ -60,7 +60,7 @@ function ajax(option) {
 
 function pickImagePath(prev) {
     if (typeof (window.pickImagePathIndex) === 'undefined') {
-        window.pickImagePathIndex = imagePaths.length - 1;
+        window.pickImagePathIndex = Math.floor(Math.random() * imagePaths.length);//imagePaths.length - 1;
     }
     if (!!prev) {
         window.pickImagePathIndex--;
