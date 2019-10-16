@@ -111,10 +111,22 @@ img.addEventListener('load', function () {
                     longitude = (info.GPSLongitude[0] + info.GPSLongitude[1] / 60 + info.GPSLongitude[2] / 3600).toFixed(7);
                 document.getElementById('exif-date').innerText = info.DateTime;
                 document.getElementById('exif-google-map').href = "https://maps.google.com/?q=" + latitude + "," + longitude + "&ll=" + latitude + "," + longitude + "&z=18";
+
+                // getAddress
+                let script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = 'https://apis.map.qq.com/ws/geocoder/v1/?location=' + latitude + "," + longitude + '&get_poi=0&key=R5DBZ-I2ERF-CS' + 'BJV-N3OY2-DU4FZ-XPFU4&output=jsonp&callback=getAddress';
+                document.body.appendChild(script);
             }
         });
     });
 });
+
+function getAddress(res) {
+    if (res.result) {
+        document.getElementById('exif-date').innerText = res.result.address + '  ' + document.getElementById('exif-date').innerText;
+    }
+}
 
 function showLoading(e) {
     let loading = document.getElementById('loading');
