@@ -10,7 +10,7 @@ let imagePaths, imgStorage = [
 function start(e) {
     showLoading(e);
     ajax({
-        url: 'https://gitee.com/api/v5/repos/chenset/flysay.com/contents/images?access_token=9b9eadf'+'3cbb91ac1'+'0f6e2c24d6c81234',
+        url: 'https://gitee.com/api/v5/repos/chenset/flysay.com/contents/images',
         success: function (res) {
             imagePaths = JSON.parse(res.responseText);
             loadImg();
@@ -18,7 +18,6 @@ function start(e) {
         error: function () {
             ajax({
                 url: 'https://api.github.com/repositories/186582306/contents/images',
-                headers: {"Authorization": "token" + " 12a1f8bf43883b5db6ca562" + "2c046f516" + "0d5dc7e6"},
                 success: function (res) {
                     imagePaths = JSON.parse(res.responseText);
                     loadImg();
@@ -59,8 +58,22 @@ function ajax(option) {
     }
 }
 
-function randomImagePath() {
-    return imagePaths[Math.floor(Math.random() * imagePaths.length)].path;
+function pickImagePath(prev) {
+    if (typeof (window.pickImagePathIndex) === 'undefined') {
+        window.pickImagePathIndex = imagePaths.length - 1;
+    }
+    if (!!prev) {
+        window.pickImagePathIndex--;
+        if (window.pickImagePathIndex < 0) {
+            window.pickImagePathIndex = imagePaths.length - 1
+        }
+    } else {
+        window.pickImagePathIndex++;
+        if (window.pickImagePathIndex >= imagePaths.length) {
+            window.pickImagePathIndex = 0;
+        }
+    }
+    return imagePaths[window.pickImagePathIndex].path;
 }
 
 window.addEventListener('resize', function () {
@@ -69,8 +82,13 @@ window.addEventListener('resize', function () {
         imgPosition();
     }, 100);
 });
+document.getElementById('prev-img').addEventListener('click', function () {
+    loadImg(true)
+});
 img.addEventListener('click', showLoading, true);
-img.addEventListener('click', loadImg);
+img.addEventListener('click', function () {
+    loadImg()
+});
 img.addEventListener('error', function () {
     if (imgStorage.length) {
         imgStorage.shift();
@@ -113,9 +131,10 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-function loadImg() {
+function loadImg(prev) {
     if (imgStorage.length) {
-        img.src = imgStorage[0] + randomImagePath();
+        img.src = imgStorage[0] + pickImagePath(prev);
+        document.getElementById('prev-img').style.display = 'block';
     }
 }
 
