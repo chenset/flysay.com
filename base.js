@@ -12,14 +12,14 @@ function start(e) {
     ajax({
         url: 'https://gitee.com/api/v5/repos/chenset/flysay.com/contents/images',
         success: function (res) {
-            imagePaths = JSON.parse(res.responseText);
+            imagePaths = shuffle(JSON.parse(res.responseText));
             loadImg();
         },
         error: function () {
             ajax({
                 url: 'https://api.github.com/repositories/186582306/contents/images',
                 success: function (res) {
-                    imagePaths = JSON.parse(res.responseText);
+                    imagePaths = shuffle(JSON.parse(res.responseText));
                     loadImg();
                 }
             });
@@ -158,4 +158,12 @@ function imgPosition() {
         img.style.left = "0";
     }
     img.style.top = (-(img.clientHeight - window.innerHeight) / 2) + "px";
+}
+
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 }
