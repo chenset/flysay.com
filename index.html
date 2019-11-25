@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="canonical" href="https://flysay.com"/>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/chenset/flysay.com/favicon.ico" type="image/x-icon">
     <style>
         * {
             padding: 0;
@@ -205,13 +205,19 @@
         script.src = src;
         document.getElementsByTagName('head')[0].appendChild(script);
     }
-</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71822351-1"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-71822351-1');
+
+    setTimeout(function () {
+        loadScriptOnce('https://www.googletagmanager.com/gtag/js?id=UA-71822351-1', function () {
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+            gtag('config', 'UA-71822351-1');
+        });
+    }, 200);
 </script>
 </body>
 </html>
