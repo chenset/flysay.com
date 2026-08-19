@@ -1,11 +1,11 @@
 'use strict';
 
 let imagePaths, imgStorage = [
+    '/',
     'https://cdn.jsdelivr.net/gh/chenset/flysay.com/',
     'https://coding-pages.flysay.com/',
     'https://pages.flysay.com/',
     'https://img.flysay.com/',
-    '/',
 ], img = document.getElementById("img-el");
 
 function start(e) {
